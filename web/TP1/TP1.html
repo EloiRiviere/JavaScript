@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+        <link rel="stylesheet" href="TP1_fichiers/bootstrap.css">
+        <script src="TP1_fichiers/jquery-3.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>TP1</title>
+    <style>
+        #checkboxShow {
+            display: none;
+        }
+        #checkboxShow {
+            text-align: center;
+        }
+        .bold span {
+            font-weight: bold;
+        }
+        .green {
+            color: green;
+        }
+        .red {
+            background-color: red;
+        }
+        #toRed {
+            color: white;
+        }
+    </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">TP1</h3>
+                        </div>
+                        <div class="panel-body">
+                            Objectif : Découvrir jQuery, les sélecteurs dans le DOM et les événements
+                        </div>
+                        <div class="panel-body">
+                            Aide :
+                            <span>
+                                <a href="http://api.jquery.com/"><span class="label label-info">jQuery Doc</span></a>
+                                <a href="http://api.jquery.com/category/selectors/"><span class="label label-info">Selectors</span></a>
+                            </span>
+                        </div>
+                    </div>
+                    <h2>Part 1 </h2>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button id="button1" class="btn btn-default btn-block">Cliquer et ouvrir une alerte</button>
+                            </div>
+                            <div class="col-md-6">
+
+                            </div>
+                        </div>
+                        <script>
+                          $("#button1").click(function(){alert("coucou world")});
+                        </script>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button id="button2" class="btn btn-default btn-block">Ajouter la class red à l'élément toRed</button>
+                            </div>
+                            <div class="col-md-6" id="toRed">
+                                C'est Bientôt le Week-End
+                            </div>
+                        </div>
+                        <script>
+                            $("#button2").click(function(){$("#toRed").addClass("red")});
+                        </script>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button id="button3" class="btn btn-default btn-block">Ajouter la class green a chaque span de class togreen dans l'élément greenLetter</button>
+                            </div>
+                            <div class="col-md-6 bold">
+                                <span id="greenLetter">
+                                    <span class="togreen">A</span>
+                                    <span>B</span>
+                                    <span class="togreen">C</span>
+                                    <span>D</span>
+                                    <span class="togreen">E</span>
+                                    <span>F</span>
+                                </span>
+                                <span class="togreen">G</span>
+                            </div>
+                        </div>
+                        <script>
+                          $("#button3").click(function(){$("#greenLetter .togreen").addClass("green")});
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Part 2</h2>
+                    <div>
+                        <form>
+                             <div class="form-group">
+                                <label for="checkbox1">Je clique ici et j'affiche l'élément checkboxShow</label>
+                                <input class="form-control" name="checkbox1" id="checkbox1" type="checkbox">
+                                <div id="checkboxShow">
+                                    <img src="TP1_fichiers/68747470733a2f2f7261772e6769746875622e636f6d2f617269616c646f.gif">
+                                </div>
+                            </div>
+                        </form>
+                        <script>
+                            $("#checkbox1").change(function()
+                            {
+                                if($("#checkbox1").is(":checked"))
+                                {
+                                    $("#checkboxShow").show();
+                                }
+                                else
+                                {
+                                    $("#checkboxShow").hide();
+                                }
+                            });
+                        </script>
+                    </div>
+                    <div>
+                        <form>
+                             <div class="form-group">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Règles</div>
+                                    <div class="panel-body">
+                                        <ul>
+                                            <li>Afficher le nombre caractère dans le span de class badge à chaque keyup</li>
+                                            <li>Si il y a plus de 3 caractères, ajouter la class "has-success" à la div parent de l'élément password1</li>
+                                            <li>Si plus de 3 caractères supprimer l'attribut disabled du #password2</li>
+                                            <li>Si la valeur l'élément password2 est égale à password1 ajouter la class "has-success" à la div parent de l'élément password2</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password1">Mot de Passe</label>
+                                    <div class="input-group">
+                                        <input class="form-control" name="password1" id="password1" type="password">
+                                        <div class="input-group-addon">
+                                            <span class="badge">0</span>
+                                            <span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password2">Validation</label>
+                                    <div>
+                                        <input class="form-control" name="password2" id="password2" disabled="disabled" type="password">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <script>
+                            $("#password1").keyup(function()
+                            {
+                                $(".badge").text($("#password1").val().length);
+                                if($("#password1").val().length > 3)
+                                {
+                                	$("#password1").parent().addClass("has-success");
+                                	$("#password2").removeAttr("disabled");
+                                }
+
+                                //console.log($("#password1").val().length);
+
+                                if($("#password1").val() == $("#password2").val())
+                            	{
+                            		$("#password2").parent().addClass("has-success");
+                            	}
+                            	else
+                            	{
+                            		$("#password2").parent().removeClass("has-success");	
+                            	}
+                            })
+
+                            $("#password2").keyup(function()
+                            {
+                            	if($("#password1").val() == $("#password2").val())
+                            	{
+                            		$("#password2").parent().addClass("has-success");
+                            	}
+                            	else
+                            	{
+                            		$("#password2").parent().removeClass("has-success");	
+                            	}
+                            })
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Part 3-1</h2>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Règles</div>
+                        <div class="panel-body">
+                            <ul>
+                                <li>Masquer les lignes du tableau qui ne
+                                  correspondent pas à l'année du formulaire
+                                </li>
+                                <li>
+                                    Le clic sur "Clear" permet de nettoyer le
+                                    formulaire et d'afficher toutes les lignes.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                          <button class="btn btn-default" id="clearBtn" type="button">Clear</button>
+                        </span>
+                        <input class="form-control" id="yearInput" placeholder="Year" type="number">
+                        <span class="input-group-btn">
+                          <button class="btn btn-default" id="yearSubmit" type="button">Chercher</button>
+                        </span>
+                    </div>
+                    <table class="table" id="president">
+                        <thead>
+                            <tr>
+                                <th>Année</th>
+                                <th>Président</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2009</td>
+                                <td>Mathieu</td>
+                            </tr>
+                            <tr>
+                                <td>2010</td>
+                                <td>Claude</td>
+                            </tr>
+                            <tr>
+                                <td>2011</td>
+                                <td>Joani</td>
+                            </tr>
+                            <tr>
+                                <td>2012</td>
+                                <td>Mathieu B</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <script>
+                      $("#yearSubmit").click(function()
+                      {
+
+                      	$("#president tr td:even").each(function()
+                      	{
+                      		console.log($(this).text());
+                      		if($("#yearInput").val() == $(this).text())
+                      		{
+                      			
+                      			$(this).parent().show();
+                      			console.log("même ^");
+                      		}
+                      		else
+                      		{
+                      			$(this).parent().hide();
+                      		}
+                      	});
+                      	
+                      });
+
+                      $("#clearBtn").click(function()
+                      {
+                      	$("#yearInput").val("");
+
+                      	$("#president tr").each(function()
+                      	{
+                      			$(this).show();
+
+                      	});
+                      });
+                    </script>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Part 3-2</h2>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Règles</div>
+                        <div class="panel-body">
+                            <ul>
+                                <li>
+                                  Le formulaire permet d'ajouter des lignes au
+                                  tableau.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <form method="post">
+                        <div class="form-group">
+                          <label for="year_form">Year</label>
+                          <input name="year" class="form-control" id="year_form" placeholder="Year" type="number">
+                        </div>
+                        <div class="form-group">
+                            <label for="president_form">Président</label>
+                            <input name="president" class="form-control" id="president_form" placeholder="President" type="text">
+                        </div>
+                        <button type="submit" id="formSubmit" class="btn btn-default">Submit</button>
+                    
+                </form></div>
+                <script>
+                  $("#formSubmit").click(function(evt)
+                  {
+                  	evt.preventDefault();
+                	$("#president tbody").append('<tr><td>' + $("#year_form").val() + '</td><td>' + $("#president_form").val() + '</td></tr>');
+                  });
+                </script>
+            </div>
+        </div>
+    
+
+</body></html>
