@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+        <link rel="stylesheet" href="TP2_fichiers/bootstrap.css">
+        <script src="TP2_fichiers/jquery-2.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>TP2</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row" id="intro">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">TP2</h3>
+                        </div>
+                        <div class="panel-body">
+                            Objectif : Jouer avec les Objects Javascript
+                        </div>
+                        <div class="panel-body">
+                            Aide :
+                            <span>
+                                <a href="https://github.com/airbnb/javascript"><span class="label label-info">Conventions</span></a>
+                <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference"><span class="label label-info">Références JS</span></a>
+                <a href="http://phrogz.net/JS/classes/OOPinJS2.html"><span class="label label-info">Héritage JS</span></a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cold-md-12" id="part1">
+             <ul class="list-group">
+            <li class="list-group-item">
+                <span class="label label-danger" i="" id="step1">✖</span>
+                Créer la class Iut
+            </li>
+            <li class="list-group-item">
+                <span class="label label-danger" id="step2">✖</span>
+                Ecrire le setter "setNom(string) pour la class Iut
+            </li>
+            <li class="list-group-item">
+                                <span class="label label-danger" id="step3">✖</span>
+                                Ecrire le getter "getNom() pour la class Iut
+                        </li>
+            <li class="list-group-item">
+                                <span class="label label-danger" id="step4">✖</span>
+                                Ecrire le getter "getEtudiants():array pour la class Iut
+                        </li>
+            <li class="list-group-item">
+                                <span class="label label-danger" id="step5">✖</span>
+                                Ecrire le setter addEtudiant(object) pour la class Iut
+                        </li>
+            <li class="list-group-item">
+                                <span class="label label-danger" id="step6">✖</span>
+                                Ecrire la classe IutClermont quii hérite de Iut
+                        </li>
+            <li class="list-group-item">
+                                <span class="label label-danger" id="step7">✖</span>
+                                Ecrire la method bestTeacher():string à la classe IutClermont
+                        </li>
+
+        </ul>
+            </div>
+        </div>
+
+    <script>
+
+/*
+// Méthode → function
+    function Iut()
+    {
+        var nom
+        this.etudiants = []
+    }
+
+    Iut.prototype.setNom = function(nom) { this.nom = nom }
+    Iut.prototype.getNom = function() { return this.nom }
+    Iut.prototype.getEtudiants = function() { return this.etudiants }
+    Iut.prototype.addEtudiant = function(etudiant) { this.etudiants.push(etudiant) }
+
+
+    function IutClermont() {}
+    IutClermont.prototype = new Iut();
+    IutClermont.prototype.constructor = IutClermont;
+    IutClermont.prototype.bestTeacher = function() { return "coucou" }
+*/
+
+//Méthode → Class
+    class Iut
+    {
+        constructor()
+        {
+            this.nom = ""
+            this.etudiants = []
+        }
+
+        setNom(nom)
+        {
+            this.nom = nom;
+        }
+
+        getNom()
+        {
+            return this.nom;
+        }
+
+        getEtudiants()
+        {
+            return this.etudiants
+        }
+
+        addEtudiant(etudiant)
+        {
+            this.etudiants.push(etudiant)
+        }
+    }
+
+    class IutClermont extends Iut
+    {
+        bestTeacher()
+        {
+            return "coucou"
+        }
+    }
+
+
+
+    function good(element) {
+        element.removeClass('label-danger').addClass('label-success').html('&#10004;');
+    }
+
+    $(document).ready(function() {
+        if (typeof Iut === 'function') {
+            var iut = new Iut();
+            if (typeof iut === 'object') {
+                good($('#step1'));
+                if (typeof iut.setNom === 'function') {
+                    good($('#step2'));
+                }
+                if (typeof iut.getNom === 'function') {
+                    iut.setNom("Clermont Ferrand");
+                    if (iut.getNom() === "Clermont Ferrand") {
+                        good($('#step3'));
+                    }
+                }
+                if ((typeof iut.getEtudiants === 'function') && Array.isArray(iut.getEtudiants())) {
+                    good($('#step4'));
+                }
+                if (typeof iut.addEtudiant === 'function') {
+                    iut.addEtudiant({name: "He"});
+                    iut.addEtudiant({name: "She"});
+                    if (iut.getEtudiants().length === 2) {
+                        good($('#step5'));
+                    }
+                }
+            }
+            if (typeof IutClermont === 'function') {
+                var iutClermont = new IutClermont();
+                if (typeof iutClermont === 'object') {
+                    if (typeof iutClermont.setNom === 'function') {
+                                        good($('#step6'));
+                    }
+                    if (typeof iutClermont.bestTeacher === 'function') {
+                        if (typeof iut.bestTeacher !== 'function') {
+                            good($('#step7'));
+                        }
+                    }
+                }
+            }
+        }
+    });
+    </script>
+
+</body></html>
