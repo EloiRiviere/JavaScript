@@ -1,0 +1,81 @@
+ <!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <script src="js/jquery-3.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body id='body'>
+    <table class="table" id="partizz">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Nom</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <button class="btn btn-primary" id='new' style="float: right; margin-right: 16%;">New</button>
+  </body>
+  <script type="text/javascript">
+    $.ajax(
+    {
+      url: 'http://127.0.0.1:8080/parties',
+      type: "GET",
+      dataType: "json",
+      success: function(parties)
+      {
+        console.log(parties);
+        $("#new").click(function()
+          	{
+          	$('#partizz').remove();
+        	$('#new').remove();
+        	$('#body').append("<form> Nom de l'évènement:</br> <input type='text' class='form-control' style='width:30%' id='nom'/> </br></br> Date: </br> <input type='date' style='width:30%' class='form-control' id='date'/> </br></br> Localisation: </br> <input type='text' id='localisation' class='form-control' style='width:30%'/> </br></br> <button type='submit' class='btn btn-primary' id='submit'>valider</button> </form>")
+
+        	 $("#submit").click(function(evt)
+        {
+        	evt.preventDefault();
+        	console.log($('form').serializeArray());
+        	name = nom.value()
+        	date = date.value()
+        	//id = $(#body).last().id+1
+        	id = 10
+        	location = localisation.value()
+        	console.log(nom)
+        	console.log(date)
+        	console.log(id)
+        	console.log(location)
+
+        	var obj = '{"date" : date, "id" : id, "location" : location, "name" : name}'
+        	parties.append(obj)
+        	POST("http://127.0.0.1:8080/parties",obj)
+
+        	console.log(obj)
+        })
+        });
+        console.log($("#submit"));
+       
+
+        parties.forEach(function(party)
+        {
+        	const $el = $('<tr><td>' + party.date + '</td><td>' + party.name + "</td><td> <button class='btn btn-primary'>Détails</button> </td></tr>")
+        	$el.find('button').click(function()
+        	{
+        		$('#partizz').remove()
+        		$('#new').remove()
+        		console.log(party)
+        		$('#body').append('<div><h1>' + party.name + '</h1><p>' + party.date + '</p></br><p>' + party.location.name + '</p></div>')
+        		$('#body').append("<button class='btn btn-primary' style='float: right; margin-right: 16%;' onClick='history.back()'>Retour</button>")
+        	})
+          	$('#partizz').append($el)
+
+        })
+      }
+    });
+
+  </script>
+
+</html>

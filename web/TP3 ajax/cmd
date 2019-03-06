@@ -1,0 +1,8 @@
+ter 1
+http_proxy=''
+curl http://127.0.0.1:8080/
+curl http://127.0.0.1:8080/parties
+curl http://127.0.0.1:8080/parties/1
+
+ter 2
+./weldmock weld.json
