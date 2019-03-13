@@ -1,16 +1,1 @@
-{
-  "parties":[
-    {
-      "date":"15/09/2018",
-      "id":1,
-      "location":{"name":"Spring break"},
-      "name":"Integration"
-    },
-    {
-      "date":"06/06/2019",
-      "id":2,
-      "location":{"name":"Middle Night"},
-      "name":"Desintegration"
-    }
-  ]
-}
+{"parties":[{"date":"15/09/2018","id":1,"location":{"name":"Spring break"},"name":"Integration"},{"date":"06/06/2019","id":2,"location":{"name":"Middle Night"},"name":"Desintegration"},{"date":"2019-03-14","id":3,"location":{"name":"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEOH"},"name":"EHOH !"}]}
