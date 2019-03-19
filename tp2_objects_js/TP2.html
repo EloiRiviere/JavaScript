@@ -17,9 +17,9 @@
                             Objectif : Jouer avec les Objects Javascript
                         </div>
                         <div class="panel-body">
-                            Aide :
+                            Aide : 
                             <span>
-                                <a href="https://github.com/airbnb/javascript"><span class="label label-info">Conventions</span></a>
+                                <a href="https://github.com/airbnb/javascript"><span class="label label-info">Conventions</span></a> 
                 <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference"><span class="label label-info">Références JS</span></a>
                 <a href="http://phrogz.net/JS/classes/OOPinJS2.html"><span class="label label-info">Héritage JS</span></a>
                             </span>
@@ -35,7 +35,7 @@
             </li>
             <li class="list-group-item">
                 <span class="label label-danger" id="step2">✖</span>
-                Ecrire le setter "setNom(string) pour la class Iut
+                Ecrire le setter "setNom(string) pour la class Iut  
             </li>
             <li class="list-group-item">
                                 <span class="label label-danger" id="step3">✖</span>
@@ -58,14 +58,13 @@
                                 Ecrire la method bestTeacher():string à la classe IutClermont
                         </li>
 
-        </ul>
+        </ul>      
             </div>
         </div>
-
+    
     <script>
 
 /*
-// Méthode → function
     function Iut()
     {
         var nom
@@ -80,11 +79,9 @@
 
     function IutClermont() {}
     IutClermont.prototype = new Iut();
-    IutClermont.prototype.constructor = IutClermont;
+    IutClermont.prototype.constructor = IutClermont; 
     IutClermont.prototype.bestTeacher = function() { return "coucou" }
 */
-
-//Méthode → Class
     class Iut
     {
         constructor()
@@ -97,7 +94,7 @@
         {
             this.nom = nom;
         }
-
+        
         getNom()
         {
             return this.nom;
@@ -157,7 +154,7 @@
                 var iutClermont = new IutClermont();
                 if (typeof iutClermont === 'object') {
                     if (typeof iutClermont.setNom === 'function') {
-                                        good($('#step6'));
+                                        good($('#step6'));  
                     }
                     if (typeof iutClermont.bestTeacher === 'function') {
                         if (typeof iut.bestTeacher !== 'function') {
