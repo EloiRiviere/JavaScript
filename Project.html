@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+        <link rel="stylesheet" href="Project_fichiers/bootstrap.css">
+        <script src="Project_fichiers/jquery-2.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Project</title>
+    </head>
+    <body>
+        <div id="container">
+        </div>
+    
+    <script>
+      function getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+      }
+
+      function showParty(party, parties) {
+        const $container = $('#container');
+        const $detail = $(`
+          <h1>${party.name}</h1>
+          <p>Le ${party.date} à ${party.location.name}</p>
+        `)
+        $container.append($detail);
+        const $button = $('<button>Retour</button>');
+        $container.append($button);
+        $button.click(function() {
+            $container.empty();
+            showParties(parties);
+        });
+      }
+
+      function showParties(parties) {
+        const $container = $('#container');
+        const $ul = $('<ul></ul>');
+        $container.append($ul);
+        parties.forEach(function(party) {
+          const $li = $(`<li><a href="#">${party.name}</a></li>`)
+          $li.find('a').click(function() {
+            $container.empty();
+            showParty(party, parties);
+          })
+          $ul.append($li);
+        })
+        $button = $('<button>new</button>');
+        $button.click(function() {
+            $container.empty();
+            const $form = $(`<form>
+                <input type="text" placeholder="Nom" name="name" /><br />
+                <input type="date" placeholder="Date" name="date" /><br />
+                <input type="text" placeholder="Lieu" name="lieu" /><br />
+                <button type="submit">Envoyer</button>
+              </form>`);
+              $form.submit(function(evt) {
+                  evt.preventDefault();
+                  const objet = {
+                    name: $form.find('input[name=name]').val(),
+                    date: $form.find('input[name=date]').val(),
+                    location: {
+                      name: $form.find('input[name=lieu]').val()
+                    },
+                    id: getRandomInt(9999999999999)
+                  }
+                  $.ajax({
+                    method: 'POST',
+                    url: 'http://localhost:8080/parties',
+                    data: JSON.stringify(objet),
+                    success: (party) => {
+                      $container.empty();
+                      parties.push(party);
+                      showParty(party, parties);
+                    }
+                  })
+              });
+              $container.append($form);
+        });
+        $container.append($button);
+      }
+
+      $(document).ready(function() {
+          const parties = $.ajax({
+            method: 'GET',
+            url: 'http://127.0.0.1:8080/parties',
+            dataType: 'json',
+            success: function(parties) {
+                showParties(parties);
+            }
+          })
+      })
+    </script>
+
+</body></html>

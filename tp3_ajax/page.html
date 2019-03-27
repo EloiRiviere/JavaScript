@@ -6,115 +6,210 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   </head>
-  <body id='body'/>
+
+  <body>
+    <div id='container'/>
+  </body>
+
   <script type="text/javascript">
 
-  	function table()
+  	function set_table(parties)
   	{
-  		$('#body').append("<table class='table' id='partizz'><thead><tr><th>Date</th><th>Nom</th><th></th></tr></thead><tbody></tbody></table><button class='btn btn-primary' id='new' style='float: right; margin-right: 16%;'>New</button>")
+  		$('#container').append(`
+      <table class='table' id='partizz'>
+          <thead>
+              <tr>
+                  <th>
+                      Date
+                  </th>
+                  <th>
+                      Nom
+                  </th>
+              </tr>
+          </thead>
+      </table>
+
+      <button class='btn btn-primary' id='new' style='float: right; margin-right: 16%;'>
+          New
+      </button>`)
+
+      code_btn_new_accueil(parties)
   	}
 
-  	function pagination(parties)
+  	function set_pagination(parties)
   	{
   		const size = Math.ceil(parties.length/5);
+      // console.log(size)
 
-	    $('#body').append("<ul id='pagination' class='pagination pagination-sm'><li><a class='active' href='#'>1</a></li><li><a href='#'>2</a></li><li><a href='#'>3</a></li><li><a href='#'>4</a></li><li><a href='#'>5</a></li></ul>")
+	    $('#container').append(`<ul id="pagination" class="pagination pagination-sm"/>`)
 
-//	    click(() => {
-//	    	parties
-//	    })
+      for(increment = 1; increment <= size; increment++)
+      {
+        $('#pagination').append(`
+                                  <li>
+                                      <a href='#'>
+                                          ${increment}
+                                      </a>
+                                  </li>
+                               `)
+      }
+
+      $('#pagination li:first a:first').addClass("active")
   	}
 
-  	function page()
+    function init_formulaire()
+    {
+      $('#container').append(`
+                              <form id='formulaire'>
+
+                                  Nom de l'évènement: </br>
+
+                                  <input type='text' class='form-control' style='width:30%' id='nom'/> </br> </br>
+
+                                  Date: </br>
+
+                                  <input type='date' style='width:30%' class='form-control' id='date'/> </br></br>
+
+                                  Localisation: </br>
+
+                                  <input type='text' id='localisation' class='form-control' style='width:30%'/> </br></br>
+
+                                  <button type='submit' class='btn btn-primary' id='submit'>valider</button>
+
+                              </form>
+                            `)
+    }
+
+
+
+    function init_btn_retour()
+    {
+      return $(`<button id='retour' class='btn btn-primary' style='float: right; margin-right: 16%;'>
+
+                  Retour
+
+                </button>
+              `)
+    }
+
+    function retour_formulaire()
+    {
+      clear_formulaire()
+      load_page_accueil()
+    }
+
+    function clear_accueil()
+    {
+      $("#pagination").remove()
+      $('#partizz').remove()
+      $('#new').remove()
+    }
+
+    function clear_formulaire()
+    {
+      $("#formulaire").remove()
+      $("#description").remove()
+      $("#retour").remove()
+    }
+
+    function code_validation_formulaire(parties)
+    {
+      // Boutton Validation de Formulaire
+      $("form").submit(function(evt)
+      {
+        evt.preventDefault()
+        var name = $("#nom").val()
+        var date = $("#date").val()
+        var id = parties[parties.length-1].id + 1
+        var location = {name : $("#localisation").val()}
+
+        var obj = {date : date, id : id, location : location, name : name}
+
+        $.ajax({
+          url:'http://127.0.0.1:8080/parties',
+          method: "POST",
+          data: JSON.stringify(obj)
+        })
+
+        console.log(obj)
+
+        retour_formulaire()
+
+      })
+    }
+
+    function load_formulaire(parties)
+    {
+      // Chargement du formulaire
+      init_formulaire()
+
+      // Boutton Retour du formulaire
+      boutton = init_btn_retour()
+      $('#container').append(boutton)
+      $("#retour").click(function()
+      {
+        retour_formulaire()
+      })
+
+      code_validation_formulaire(parties)
+    }
+
+
+
+    function chargement_partizz(parties)
+    {
+      // détail
+      parties.forEach(function(party)
+      {
+        const $el = $('<tr><td>' + party.date + '</td><td>' + party.name + "</td><td> <button class='btn btn-primary'>Détails</button> </td></tr>")
+        $el.find('button').click(function()
+        {
+          clear_accueil()
+          console.log(party)
+
+          $('#container').append("<div id='description'><h1>" + party.name + '</h1><p>' + party.date + '</p></br><p>' + party.location.name + '</p></div>')
+          $button = $("<button id='retour' class='btn btn-primary' style='float: right; margin-right: 16%;'>Retour</button>")
+          $button.click(function()
+          {
+            $("#description").remove()
+            $("#retour").remove()
+            load_page_accueil()
+          })
+          $('#container').append($button)
+        })
+          $('#partizz').append($el)
+      })
+    }
+
+    function code_btn_new_accueil(parties)
+    {
+      $("#new").click(function()
+      {
+        // Boutton New de l'accueil
+        clear_accueil()
+        load_formulaire(parties)
+      })
+    }
+
+  	function load_page_accueil()
   	{
   		$.ajax(
 	    {
-		    type: "GET",
-		    url: 'http://127.0.0.1:8080/parties',
-		    dataType: "json",
-		    success: function(parties)
-		    {
-	        	console.log(parties)
+  		    type: "GET",
+  		    url: 'http://127.0.0.1:8080/parties',
+  		    dataType: "json",
+  		    success: function(parties)
+  		    {
+  	        	console.log(parties)
+              set_table(parties)
+              chargement_partizz(parties)
+  		       	set_pagination(parties)
+  	      }
+	     })
+	  }
 
-		        // Boutton New de l'accueil
-		        $("#new").click(function()
-		          	{
-	          		$("#pagination").remove()
-		          	$('#partizz').remove()
-		        	$('#new').remove()
-		        	$('#body').append("<form id='formulaire'> Nom de l'évènement:</br> <input type='text' class='form-control' style='width:30%' id='nom'/> </br></br> Date: </br> <input type='date' style='width:30%' class='form-control' id='date'/> </br></br> Localisation: </br> <input type='text' id='localisation' class='form-control' style='width:30%'/> </br></br> <button type='submit' class='btn btn-primary' id='submit'>valider</button> </form>")
-		        	
-		        	// Boutton Retour de l'accueil
-		        	$button = $("<button id='retour' class='btn btn-primary' style='float: right; margin-right: 16%;'>Retour</button>")
-		        	$button.click(function()
-		        	{
-		        		$("#formulaire").remove()
-		        		$("#retour").remove()
-		        		table()
-		        		page()
-		        		pagination()
-		        	})
-		        	$('#body').append($button)
-
-		        	// Boutton Validation de Formulaire
-		        	$("form").submit(function(evt)
-		        	{
-			        	evt.preventDefault()
-			        	var name = $("#nom").val()
-			        	var date = $("#date").val()
-			        	var id = parties[parties.length-1].id + 1
-			        	var location = {name : $("#localisation").val()}
-
-			        	var obj = {date : date, id : id, location : location, name : name}
-
-			        	$.ajax({
-			        		url:'http://127.0.0.1:8080/parties',
-			        		method: "POST",
-			        		data: JSON.stringify(obj)
-			        	})
-
-			        	console.log(obj)
-			        	$("#formulaire").remove()
-			        	$("#description").remove()
-		        		$("#retour").remove()
-		        		table()
-		        		page()
-		        		pagination()
-		        	})
-		        })
-		        console.log($("#submit"))
-		       
-		        // détail
-		        parties.forEach(function(party)
-		        {
-		        	const $el = $('<tr><td>' + party.date + '</td><td>' + party.name + "</td><td> <button class='btn btn-primary'>Détails</button> </td></tr>")
-		        	$el.find('button').click(function()
-		        	{
-		        		$('#partizz').remove()
-		        		$('#new').remove()
-		        		$('#pagination').remove()
-		        		console.log(party)
-		        		$('#body').append("<div id='description'><h1>" + party.name + '</h1><p>' + party.date + '</p></br><p>' + party.location.name + '</p></div>')
-		        		$button = $("<button id='retour' class='btn btn-primary' style='float: right; margin-right: 16%;'>Retour</button>")
-		        		$button.click(function()
-		        		{
-		        			$("#description").remove()
-		        			$("#retour").remove()
-		        			table()
-		        			page()
-		        			pagination()
-		        		})
-		        		$('#body').append($button)
-		        	})
-		          	$('#partizz').append($el)
-		        })
-		       	pagination(parties);
-	      	}
-	    })
-	}
-
-	table()
-	page()
+  // Code exécuté au démarrage
+	load_page_accueil()
 
   </script>
 
